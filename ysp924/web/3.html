@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简陋音乐播放器</title>
+</head>
+<style>
+    #guide1,
+    #guide2 {
+        position: absolute;
+        font-size: 30px;
+        font-weight: 300;
+        top: 10px;
+    }
+
+    a:hover {
+        font-weight: 500;
+    }
+
+    #guide1 {
+        left: 10px;
+
+    }
+
+    #guide2 {
+        right: 10px;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .active {
+        font-weight: bold;
+    }
+
+    #container {
+        max-height: 85vh;
+        overflow: hidden;
+    }
+
+    .span {
+        max-height: 5vh;
+        font-size: 30px;
+        transform: translateX(-3vw);
+    }
+</style>
+
+<body>
+    <div id="guide1">
+        <a href=".\2.html">上一页(2.html)</a><br>
+        <a href=".\index.html">根页面</a>
+    </div>
+    <div id="guide2">
+        <a href="4.html">>>下一页(4.html)</a>
+    </div>
+    <div>
+        <span class="span">恭喜发财</span>
+    </div>
+    <div id="container"></div>
+    <audio id="audioplayer" src="..\images\audio.mp3" controls>
+    </audio>
+    <script>
+        const Lrc =
+            "[00:00.00]恭喜 发财 - 刘德华 (Andy Lau)\n[00:15.17]词：刘德华/李安修\n[00:17.52]曲：伍乐城\n[00:18.82]编曲：温昊翁\n[00:20.39]翻唱：炫智\n[00:22.74]后期、混音：炫智\n[00:24.74]\n[00:25.12]我 恭喜你发财\n[00:29.00]我恭喜你精彩\n[00:32.60]最好的请过来\n[00:34.43]不好的请走开\n[00:36.42]礼多人不怪\n[00:41.74]我祝\n[00:42.41]满天下的女孩\n[00:43.76]找 一个好男孩\n[00:45.53]俩小口永远在一块\n[00:49.01]我祝\n[00:49.69]满天下的小孩\n[00:51.00]聪明胜过秀才\n[00:52.81]智 慧充满你 脑袋\n[00:56.29]我祝\n[00:56.95]尊敬的姑奶奶\n[00:58.25]三十六圈的比赛\n[01:00.10]气不喘面容不改\n[01:03.60]我祝\n[01:04.17]三叔公的买卖\n[01:05.54]生意扬名四海\n[01:07.36]财运亨通住 豪宅\n[01:10.60]大摇大摆\n[01:14.19]乐天替你消灾\n[01:18.29]恭喜 发财\n[01:22.09]要喊得够 豪迈\n[01:25.57]恭喜发财\n[01:28.99]我恭喜你发财\n[01:32.64]我恭喜你精彩\n[01:36.22]最好的请过来\n[01:38.07]不好的请走开\n[01:40.08]礼多人不怪\n[01:56.34]我祝\n[01:56.93]大家笑口常开\n[01:58.30]用心把爱去灌溉\n[02:00.16]明天 呀我们更厉害\n[02:03.60]我祝\n[02:04.25]在世界的舞台\n[02:05.63]跑得比那黑人更快\n[02:07.37]岁岁年年出 人才\n[02:10.66]大摇大摆\n[02:14.15]乐天替你消灾\n[02:18.37]恭喜发财\n[02:22.15]要喊得够 豪迈\n[02:25.40]我恭喜你发财\n[02:29.03]我恭喜你精彩\n[02:32.64]最好的请过来\n[02:34.49]不好的请走开\n[02:36.47]礼多人不怪\n[02:40.16]我 恭喜你发财\n[02:45.42]我恭喜你精彩\n[02:49.00]最好的请过来\n[02:50.84]不好的请走开\n[02:52.72]礼多人不怪\n[03:00.15]恭喜发财\n";
+        const lyricsobject = {
+            lyrics: []
+        };
+
+        const lyricslines = Lrc.split('\n');
+        lyricslines.forEach(line => {
+            const match = line.match(/\[(\d{2}:\d{2}\.\d{2})\](.*)/);
+            if (match) {
+                const timestamp = match[1];
+                const lyricText = match[2];
+
+                lyricsobject.lyrics.push([timestamp, lyricText]);
+            }
+
+        });
+
+        const container = document.getElementById('container');
+        lyricsobject.lyrics.forEach(item => {
+            const p = document.createElement('p');
+            p.textContent = item[1];
+
+            p.dataset.timestamp = item[0];
+
+            container.appendChild(p);
+        });
+
+        const audioplayer = document.getElementById('audioplayer');
+        let activep = null;
+        audioplayer.addEventListener('timeupdate', function () {
+            const currenttime = audioplayer.currentTime;
+            const paragraphs = document.querySelectorAll('p');
+            paragraphs.forEach(p => {
+
+                const lyricTime = convert(p.dataset.timestamp);//转换时间，定义在最后
+                if (currenttime >= lyricTime) {
+                    if (activep && activep !== p) {
+                        activep.classList.remove('active');
+                    }
+                    activep = p;
+                    activep.classList.add('active');
+                    if (activep) {
+
+                        const topjuli = container.getBoundingClientRect();
+                        const pdejuli = activep.getBoundingClientRect();
+                        const gundejuli = container.scrollTop + pdejuli.top - topjuli.top - container.clientHeight / 2 + pdejuli.height / 2;
+                        container.scrollTop = gundejuli;
+                    }
+                }
+            });
+        });
+
+        function convert(timestamp) {
+
+            const [minutes, seconds] = timestamp.split(':').map(Number);
+            return minutes * 60 + seconds;
+        }
+    </script>
+</body>
+
+</html>

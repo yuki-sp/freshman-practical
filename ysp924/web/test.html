@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>点击链接替换页面内容</title>
+</head>
+
+<body>
+  <a href="#" id="myLink1" data-content='<h2>这是链接1替换后的标题</h2><p>这是链接1替换后的段落内容。</p>'>点击我不跳转并替换内容（链接1）</a>
+  <a href="#" id="myLink2" data-content='<h2>这是链接2替换后的标题</h2><p>这是链接2替换后的段落内容。</p>'>点击我不跳转并替换内容（链接2）</a>
+  <div id="contentContainer"></div>
+
+  <script>
+    // 获取内容容器元素
+    const contentContainer = document.getElementById('contentContainer');
+
+    // 获取所有带有data-content属性的链接元素
+    const links = document.querySelectorAll('a[data-content]');
+
+    // 遍历每个链接并添加点击事件监听器
+    links.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        // 阻止链接默认跳转行为
+        e.preventDefault();
+
+        // 获取当前链接的data-content属性值，即对应的自定义内容
+        const customContent = this.getAttribute('data-content');
+
+        // 将自定义内容设置到内容容器中
+        contentContainer.innerHTML = customContent;
+      });
+    });
+  </script>
+
+</body>
+
+</html>
