@@ -276,6 +276,41 @@
             color: red;
             font-size: 30px;
         }
+        .clickimg {
+            width: 30px;
+            height: 30px;
+            display: none;
+            position: absolute;
+            border-radius: 50%;
+            animation: spin .5s linear infinite,fadeAway .5s linear forwards;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes fadeAway {
+            0% {
+                opacity: 1;
+            }
+
+            17% {
+                opacity: 0.8;
+            }
+
+            83% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
@@ -689,6 +724,19 @@
         }
 
 
+        const documentBody = document.body;
+        documentBody.addEventListener('click', function (event) {
+            const imgElement = document.createElement('img');
+            imgElement.classList.add('clickimg');
+            imgElement.src = '../images/1.png';
+            imgElement.style.left = event.clientX + 'px';
+            imgElement.style.top = event.clientY + 'px';
+            imgElement.style.display = 'block';
+            documentBody.appendChild(imgElement);
+            setTimeout(() => {
+                document.body.removeChild(imgElement);
+            }, 1000);
+        });
     </script>
 </body>
 

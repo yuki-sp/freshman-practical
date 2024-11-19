@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>模拟网易云</title>
+    <title>js数据结构</title>
+    <script src=".\highlight.min.js"></script>
+    <!-- <script src=".\javascript.min.js"></script> -->
 </head>
 <style>
     #guide1,
@@ -39,15 +41,353 @@
     a:hover {
         text-decoration: underline;
     }
+
+    body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .centered {
+        position: fixed;
+        transform: translate(-50%, -50%);
+        animation: rotate 40s linear infinite;
+        opacity: 0.3;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+        to {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+
+    #image1 {
+        left: 150px;
+        top: 700px;
+        width: 700px;
+    }
+
+    #image2 {
+        left: 1600px;
+        top: 100px;
+        width: 500px;
+    }
+
+    .image {
+        position: absolute;
+        background-image: url(../images/1.png);
+        background-size: cover;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: move 10s linear forwards, rotate3D 10s linear forwards, fadeInOut 10s linear forwards;
+    }
+
+    @keyframes move {
+        0% {
+            top: var(--start-top);
+            left: var(--start-left);
+        }
+
+        100% {
+            top: var(--end-top);
+            left: var(--end-left);
+        }
+    }
+
+    @keyframes rotate3D {
+        0% {
+            transform: translateX(-50%) rotate3d(0, 0, 0, 0deg);
+        }
+
+        100% {
+            transform: translateX(-50%) rotate3d(var(--rotateX), var(--rotateY), var(--rotateZ), var(--rotateDeg));
+        }
+    }
+
+    @keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        17% {
+            opacity: 0.3;
+        }
+
+        83% {
+            opacity: 0.3;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .scrollable-div {
+        height: 100vh;
+        width: 60vw;
+        background-color: lightgray;
+        margin: 0 auto;
+        overflow: auto;
+        padding: 20px;
+    }
+
+    .scrollable-div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    .scrollable-div::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollable-div::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+
+    #guide {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #guide a {
+        margin: 0 20px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    #guide a:hover {
+        text-decoration: underline;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    p {
+        font-size: 20px;
+        text-indent: 2em;
+    }
+
+    code {
+        font-size: 14px;
+    }
+
+    .clickimg {
+        width: 30px;
+        height: 30px;
+        display: none;
+        position: absolute;
+        border-radius: 50%;
+        animation: spin .5s linear infinite, fadeAway .5s linear forwards;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes fadeAway {
+        0% {
+            opacity: 1;
+        }
+
+        17% {
+            opacity: 0.8;
+        }
+
+        83% {
+            opacity: 0.3;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
 </style>
+<link rel="stylesheet" href=".\github-dark.min.css">
 
 <body>
+    <img src="../images/1.png" alt="" id="image1" class="centered" ondragstart="return false">
+    <img src="../images/1.png" alt="" id="image2" class="centered" ondragstart="return false">
     <div id="guide1">
         <a href=".\3.html">上一页(3.html)</a>
     </div>
     <div id="guide2">
         <a href=".\index.html">根页面</a>
     </div>
+    <div class="scrollable-div">
+        <h1>js实现一些数据结构及其相关解释</h1>
+        <p style="text-align: center;">（js源代码:<a href="https://github.com/yuki-sp/DataStructure"
+                style="color:#57b6e5">github仓库</a></p>
+        <h2>排序</h2>
+        <h3>插排</h3>
+        <pre><code class="language-javascript">
+var insertionSort = function (array) {
+    const len = array.length;
+    for (let i = 1; i < len; i++) {
+        let now = array[i];
+        let j = i - 1;
+        while (j >= 0 && now < array[j]) {
+            array[j + 1] = array[j];
+            j--;
+        }
+        array[j + 1] = now;
+    }
+    return array;
+}
+// 空间复杂度O(1)
+// 时间复杂度O(n^2)
+// 稳定
+        </code></pre>
+        <h3>快排</h3>
+        <pre>
+            <code class="language-javascript">
+var quickSort = function (arr) {
+    if (arr.length <= 1) return arr;
+    return quickSortHelper(arr, 0, arr.length - 1);
+}
+
+function quickSortHelper(arr, left, right) {
+    if (left < right) {
+        let pivotIndex = partition(arr, left, right);
+        quickSortHelper(arr, left, pivotIndex - 1);
+        quickSortHelper(arr, pivotIndex + 1, right);
+    }
+    return arr;
+}
+
+var partition = function (arr, left, right) {
+    let pivot = arr[left];
+    let i = left + 1;
+    let j = right;
+    while (true) {
+        while (i <= j && arr[i] <= pivot) {
+            i++;
+        }
+        while (i <= j && arr[j] > pivot) {
+            j--;
+        }
+        if (i >= j) break;
+        // 交换元素
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    // 将基准元素放到合适位置
+    [arr[left], arr[j]] = [arr[j], arr[left]];
+    return j;
+}
+// 时间O(nlogn)
+// 空间O(n)
+// 不稳定 
+            </code>
+        </pre>
+        <h3>堆排</h3>
+        <pre><code class="language-javascript">
+var heapSort = function(nums) {
+    const nl = nums.length
+    // 交换
+    const swap = (max, n) => {
+        const t = nums[max]
+        nums[max] = nums[n]
+        nums[n] = t
+    }
+    // 建立最大堆
+    const heapify = (n, length) => {
+        const l = 2 * n + 1, r = l + 1
+        let max = n
+        if (l < length && nums[l] > nums[max]) max = l
+        if (r < length && nums[r] > nums[max]) max = r
+        if (max != n) {
+            swap(max, n)
+            // 递归以下节点，维护最大堆
+            heapify(max, length)
+        }
+    }
+    // 建立堆
+    for (let i = Math.floor(nl/2) - 1; i >= 0; i--)
+        heapify(i, nl)
+    // 排序
+    for (let i = nl - 1; i >= nl - k; i--) {
+        // 最大的与最后一个交换位置
+        swap(0, i)
+        // 维护最大堆
+        heapify(0, i)
+    }
+};
+// 时间O(nlogn)
+// 空间O(1)
+// 不稳定 
+
+
+        </code></pre>
+    </div>
+    <script>
+        function createImage() {
+            const size = Math.random() * (50 - 15) + 15 + 'px';
+            const startTop = Math.random() * 200 - 50 + 'vh';
+            const startLeft = Math.random() * 200 - 50 + 'vw';
+            const endTop = Math.random() * 200 - 50 + 'vh';
+            const endLeft = Math.random() * 200 - 50 + 'vw';
+            const rotateX = Math.random();
+            const rotateY = Math.random();
+            const rotateZ = Math.random();
+            const rotateDeg = Math.random() * 1800 + 'deg';
+            const image = document.createElement('div');
+            image.classList.add('image');
+            image.style.width = size;
+            image.style.height = size;
+            image.style.setProperty('--start-top', startTop);
+            image.style.setProperty('--start-left', startLeft);
+            image.style.setProperty('--end-top', endTop);
+            image.style.setProperty('--end-left', endLeft);
+            image.style.setProperty('--rotateX', rotateX);
+            image.style.setProperty('--rotateY', rotateY);
+            image.style.setProperty('--rotateZ', rotateZ);
+            image.style.setProperty('--rotateDeg', rotateDeg);
+            image.style.animationDuration = "10s";
+            document.body.appendChild(image);
+            setTimeout(() => {
+                document.body.removeChild(image);
+            }, 10000);
+            image.ondragstart = function () {
+                return false;
+            }
+        }
+        setInterval(createImage, 500);
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.initHighlightingOnLoad();
+
+            hljs.highlightAll();
+        });
+        const documentBody = document.body;
+        documentBody.addEventListener('click', function (event) {
+            const imgElement = document.createElement('img');
+            imgElement.classList.add('clickimg');
+            imgElement.src = '../images/1.png';
+            imgElement.style.left = event.clientX + 'px';
+            imgElement.style.top = event.clientY + 'px';
+            imgElement.style.display = 'block';
+            documentBody.appendChild(imgElement);
+            setTimeout(() => {
+                document.body.removeChild(imgElement);
+            }, 1000);
+        });
+    </script>
+
 </body>
 
 </html>

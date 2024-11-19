@@ -38,9 +38,7 @@
 
         #image2 {
             left: 1600px;
-            /*1600px*/
             top: 100px;
-            /*100px*/
             width: 500px;
         }
 
@@ -114,27 +112,68 @@
         .scrollable-div::-webkit-scrollbar-thumb {
             background: transparent;
         }
-        #guide{
+
+        #guide {
             position: relative;
             display: flex;
-            flex-direction:row;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
         }
-        #guide a{
+
+        #guide a {
             margin: 0 20px;
             cursor: pointer;
             text-decoration: none;
         }
-        #guide a:hover{
-            text-decoration:underline;
+
+        #guide a:hover {
+            text-decoration: underline;
         }
-        h1{
+
+        h1 {
             text-align: center;
         }
-        p{
+
+        p {
             font-size: 20px;
             text-indent: 2em;
+        }
+
+        .clickimg {
+            width: 30px;
+            height: 30px;
+            display: none;
+            position: absolute;
+            border-radius: 50%;
+            animation: spin .5s linear infinite,fadeAway .5s linear forwards;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes fadeAway {
+            0% {
+                opacity: 1;
+            }
+
+            17% {
+                opacity: 0.8;
+            }
+
+            83% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -186,6 +225,21 @@
             }
         }
         setInterval(createImage, 500);
+
+
+        const documentBody = document.body;
+        documentBody.addEventListener('click', function (event) {
+            const imgElement = document.createElement('img');
+            imgElement.classList.add('clickimg');
+            imgElement.src = '../images/1.png';
+            imgElement.style.left = event.clientX + 'px';
+            imgElement.style.top = event.clientY + 'px';
+            imgElement.style.display = 'block';
+            documentBody.appendChild(imgElement);
+            setTimeout(() => {
+                document.body.removeChild(imgElement);
+            }, 1000);
+        });
     </script>
 </body>
 

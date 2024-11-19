@@ -39,6 +39,59 @@
     a:hover {
         text-decoration: underline;
     }
+    table {
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: center;
+      width: 60px;
+    }
+    input{
+        width: 50px;
+    }
+    body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .clickimg {
+            width: 30px;
+            height: 30px;
+            display: none;
+            position: absolute;
+            border-radius: 50%;
+            animation: spin .5s linear infinite,fadeAway .5s linear forwards;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes fadeAway {
+            0% {
+                opacity: 1;
+            }
+
+            17% {
+                opacity: 0.8;
+            }
+
+            83% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
 </style>
 
 <body>
@@ -49,6 +102,124 @@
     <div id="guide2">
         <a href="3.html">>>下一页(3.html)</a>
     </div>
+    <h2>矩阵相乘计算器</h2>
+
+    <div>
+      <label>矩阵 A (行 x 列):</label>
+      <input id="matrixA-rows" type="number" placeholder="行" autofocus>
+      <input id="matrixA-cols" type="number" placeholder="列">
+    </div>
+  
+    <div>
+      <label>矩阵 B (行 x 列):</label>
+      <input id="matrixB-rows" type="number" placeholder="行">
+      <input id="matrixB-cols" type="number" placeholder="列">
+    </div>
+  
+    <button onclick="generateMatrices()">生成矩阵输入框</button>
+  
+    <div id="matrixA-container"></div>
+    <div id="matrixB-container"></div>
+    <button onclick="multiplyMatrices()">计算相乘结果</button>
+  
+    <h3>结果：</h3>
+    <div id="result"></div>
+
+    <script>
+        function generateMatrices() {
+          const aRows = parseInt(document.getElementById("matrixA-rows").value);
+          const aCols = parseInt(document.getElementById("matrixA-cols").value);
+          const bRows = parseInt(document.getElementById("matrixB-rows").value);
+          const bCols = parseInt(document.getElementById("matrixB-cols").value);
+    
+          if (aCols !== bRows) {
+            alert("矩阵 A 的列数应等于矩阵 B 的行数！");
+            return;
+          }
+    
+          // 创建矩阵 A 输入框
+          const matrixAContainer = document.getElementById("matrixA-container");
+          matrixAContainer.innerHTML = "<h3>矩阵 A:</h3>";
+          for (let i = 0; i < aRows; i++) {
+            for (let j = 0; j < aCols; j++) {
+              matrixAContainer.innerHTML += `<input id="a-${i}-${j}" type="number" placeholder="0"> `;
+            }
+            matrixAContainer.innerHTML += "<br>";
+          }
+    
+          // 创建矩阵 B 输入框
+          const matrixBContainer = document.getElementById("matrixB-container");
+          matrixBContainer.innerHTML = "<h3>矩阵 B:</h3>";
+          for (let i = 0; i < bRows; i++) {
+            for (let j = 0; j < bCols; j++) {
+              matrixBContainer.innerHTML += `<input id="b-${i}-${j}" type="number" placeholder="0"> `;
+            }
+            matrixBContainer.innerHTML += "<br>";
+          }
+        }
+    
+        function multiplyMatrices() {
+          const aRows = parseInt(document.getElementById("matrixA-rows").value);
+          const aCols = parseInt(document.getElementById("matrixA-cols").value);
+          const bCols = parseInt(document.getElementById("matrixB-cols").value);
+    
+          // 获取矩阵 A 和矩阵 B 的数据
+          const matrixA = [];
+          for (let i = 0; i < aRows; i++) {
+            matrixA[i] = [];
+            for (let j = 0; j < aCols; j++) {
+              matrixA[i][j] = parseFloat(document.getElementById(`a-${i}-${j}`).value) || 0;
+            }
+          }
+    
+          const matrixB = [];
+          for (let i = 0; i < aCols; i++) {
+            matrixB[i] = [];
+            for (let j = 0; j < bCols; j++) {
+              matrixB[i][j] = parseFloat(document.getElementById(`b-${i}-${j}`).value) || 0;
+            }
+          }
+    
+          // 计算矩阵乘积
+          const result = [];
+          for (let i = 0; i < aRows; i++) {
+            result[i] = [];
+            for (let j = 0; j < bCols; j++) {
+              result[i][j] = 0;
+              for (let k = 0; k < aCols; k++) {
+                result[i][j] += matrixA[i][k] * matrixB[k][j];
+              }
+            }
+          }
+    
+          // 显示结果
+          let resultHTML = "<h3>结果矩阵:</h3><table>";
+          result.forEach(row => {
+            resultHTML += "<tr>";
+            row.forEach(value => {
+              resultHTML += `<td>${value}</td>`;
+            });
+            resultHTML += "</tr>";
+          });
+          resultHTML += "</table>";
+    
+          // 一次性设置 innerHTML
+          document.getElementById("result").innerHTML = resultHTML;
+        }
+        const documentBody = document.body;
+        documentBody.addEventListener('click', function (event) {
+            const imgElement = document.createElement('img');
+            imgElement.classList.add('clickimg');
+            imgElement.src = '../images/1.png';
+            imgElement.style.left = event.clientX + 'px';
+            imgElement.style.top = event.clientY + 'px';
+            imgElement.style.display = 'block';
+            documentBody.appendChild(imgElement);
+            setTimeout(() => {
+                document.body.removeChild(imgElement);
+            }, 1000);
+        });
+      </script>
 </body>
 
 </html>
