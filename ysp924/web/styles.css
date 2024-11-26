@@ -1,0 +1,19 @@
+body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+canvas {
+  border: 1px solid black;
+}
+
+button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+#scoreDisplay,
+#highScoreDisplay {
+  margin-top: 10px;
+}

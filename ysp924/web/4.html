@@ -226,12 +226,13 @@
         <a href=".\3.html">上一页(3.html)</a>
     </div>
     <div id="guide2">
-        <a href=".\index.html">根页面</a>
+        <a href="../index.html">根页面</a>
     </div>
     <div class="scrollable-div">
         <h1>js实现一些数据结构及其相关解释</h1>
         <p style="text-align: center;">（js源代码:<a href="https://github.com/yuki-sp/DataStructure"
                 style="color:#57b6e5">github仓库</a></p>
+                <p style="text-align: center;">结尾有小彩蛋）</p>
         <h2>排序</h2>
         <h3>插排</h3>
         <pre><code class="language-javascript">
@@ -332,6 +333,411 @@ var heapSort = function(nums) {
 
 
         </code></pre>
+        <h2>图</h2>
+        <pre>
+            <code class="language-javascript">
+class Graph {
+    constructor() {
+        this.list = {};
+    }
+
+    // 添加顶点
+    addVertex(vertex) {
+        if (!this.list[vertex]) {
+            this.list[vertex] = [];
+        }
+    }
+
+    // 添加有向边
+    addEdge(v1, v2) {
+        if (this.list[v1] && this.list[v2]) {
+            this.list[v1].push(v2);
+        }
+    }
+}
+            </code>
+        </pre>
+        <h3>bfs</h3>
+        <pre>
+            <code class="language-javascript">
+Graph.bfs=function(start){
+        const queue = [start];
+        const result = [];
+        const visited = {};
+        visited[start] = true;
+
+        while (queue.length) {
+            const current = queue.shift();
+            result.push(current);
+
+            this.list[current].forEach(neighbor => {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.push(neighbor);
+                }
+            });
+        }
+
+        return result;
+}
+            </code>
+        </pre>
+        <h3>dfs</h3>
+        <pre>
+            <code class="language-javascript">
+Graph.dfs=function(start) {
+        const result = [];
+        const visited = {};
+        const adjacencyList = this.adjacencyList;
+
+        (function dfs(vertex) {
+            if (!vertex) return;
+            visited[vertex] = true;
+            result.push(vertex);
+
+            adjacencyList[vertex].forEach(neighbor => {
+                if (!visited[neighbor]) {
+                    dfs(neighbor);
+                }
+            });
+        })(start);
+        return result;
+}
+            </code>
+        </pre>
+        <h2>链表</h2>
+        <h3>单向链表</h3>
+        <pre>
+            <code class="language-javascript">
+class Node {
+    constructor(data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class SinglyLinkedList {
+    constructor() {
+        this.head = null;
+    }
+
+    // 在链表的开头插入节点
+    insertAtBeginning(data) {
+        const newNode = new Node(data);
+        newNode.next = this.head;
+        this.head = newNode;
+    }
+
+    // 在链表的末尾插入节点
+    insertAtEnd(data) {
+        const newNode = new Node(data);
+        if (!this.head) {
+            this.head = newNode;
+            return;
+        }
+        let current = this.head;
+        while (current.next) {
+            current = current.next;
+        }
+        current.next = newNode;
+    }
+
+    // 删除指定值的节点
+    deleteNode(data) {
+        if (!this.head) return;
+
+        // 如果要删除的是头节点
+        if (this.head.data === data) {
+            this.head = this.head.next;
+            return;
+        }
+
+        let current = this.head;
+        while (current.next && current.next.data !== data) {
+            current = current.next;
+        }
+
+        // 如果找到了要删除的节点
+        if (current.next) {
+            current.next = current.next.next;
+        }
+    }
+
+    // 查找包含指定值的节点
+    search(data) {
+        let current = this.head;
+        while (current) {
+            if (current.data === data) {
+                return true; // 找到节点
+            }
+            current = current.next;
+        }
+        return false; // 未找到节点
+    }
+
+    // 修改指定节点的值
+    updateNode(oldData, newData) {
+        let current = this.head;
+        while (current) {
+            if (current.data === oldData) {
+                current.data = newData; // 更新节点数据
+                return true; // 更新成功
+            }
+            current = current.next;
+        }
+        return false; // 未找到需要更新的节点
+    }
+}
+            </code>
+        </pre>
+        <h3>双向链表</h3>
+        <pre>
+            <code class="language-javascript">
+class Node {
+    constructor(data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+
+class DoublyLinkedList {
+    constructor() {
+        this.head = null;
+        this.tail = null;
+    }
+
+    // 在链表的开头插入节点
+    insertAtBeginning(data) {
+        const newNode = new Node(data);
+        if (!this.head) {
+            // 如果链表为空
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            // 插入到头节点之前
+            newNode.next = this.head;
+            this.head.prev = newNode;
+            this.head = newNode;
+        }
+    }
+
+    // 在链表的末尾插入节点
+    insertAtEnd(data) {
+        const newNode = new Node(data);
+        if (!this.tail) {
+            // 如果链表为空
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            // 插入到尾节点之后
+            newNode.prev = this.tail;
+            this.tail.next = newNode;
+            this.tail = newNode;
+        }
+    }
+
+    // 删除指定值的节点
+    deleteNode(data) {
+        // 如果要删除的是头节点
+        if (this.head.data === data) {
+            this.head = this.head.next;
+            if (this.head) {
+                this.head.prev = null;
+            } else {
+                this.tail = null; // 如果删除后链表为空
+            }
+            return;
+        }
+
+        // 如果要删除的是尾节点
+        if (this.tail.data === data) {
+            this.tail = this.tail.prev;
+            if (this.tail) {
+                this.tail.next = null;
+            } else {
+                this.head = null; // 如果删除后链表为空
+            }
+            return;
+        }
+
+        // 删除中间节点
+        else {
+            let current = this.head;
+            while (current) {
+                if (current.data === data) {
+                    current.prev.next = current.next;
+                    if (current.next) {
+                        current.next.prev = current.prev;
+                    }
+                    return;
+                }
+                current = current.next;
+            }
+        }
+    }
+
+    // 查找包含指定值的节点
+    search(data) {
+        let current = this.head;
+        while (current) {
+            if (current.data === data) {
+                return true; // 找到节点
+            }
+            current = current.next;
+        }
+        return false; // 未找到节点
+    }
+
+    // 修改指定节点的值
+    updateNode(oldData, newData) {
+        let current = this.head;
+        while (current) {
+            if (current.data === oldData) {
+                current.data = newData; // 更新节点数据
+                return true; // 更新成功
+            }
+            current = current.next;
+        }
+        return false; // 未找到需要更新的节点
+    }
+}
+            </code>
+        </pre>
+        <h2>树</h2>
+        <h3>遍历（递归）</h3>
+        <pre>
+            <code class="language-javascript">
+                // 前序遍历
+                // class Treenode {
+                //     constructor(data) {
+                //         this.data = data;
+                //         this.children = [];
+                //     }
+                //     addChild(childNode) {
+                //         this.children.push(childNode);
+                //     }
+                // }
+                
+                var preOrderTraversal = (node) => {
+                    const result = [];
+                    if (node) {
+                        result.push(node.data);
+                        for (let child of node.children) {
+                            preOrderTraversal(child);
+                        }
+                    }
+                }
+                preOrderTraversal(root);
+                
+                // 中序遍历
+                var inorderTraversal = (root) => {
+                    const result = [];
+                    function traverse(node) {
+                        if (node === null) {
+                            return;
+                        }
+                        traverse(node.left);
+                        result.push(node.data);
+                        traverse(node.right);
+                    }
+                    traverse(root);
+                    return result;
+                }
+                inorderTraversal(root);
+                
+                // 后序遍历
+                // Treenode同中序遍历
+                // 目前写的都是二叉树，多叉的应该像前序遍历那样搞node，再改动一点就行了
+                var postorderTraversal = (root) => {
+                    const result = [];
+                    function traverse(node) {
+                        if (node === null) {
+                            return;
+                        }
+                        traverse(node.left);
+                        traverse(node.right);
+                        result.push(node.data);
+                    }
+                    traverse(root);
+                    return result;
+                }
+                postorderTraversal(root);
+            </code>
+        </pre>
+        <h3>遍历（非递归）</h3>
+        <pre>
+            <code class="language-javascript">
+// class TreeNode {
+//     constructor(data) {
+//         this.data = data;
+//         this.left = null;
+//         this.right = null;
+//     }
+// }
+
+//前序遍历
+function preorderTraversal(root) {
+    const result = [];
+    const stack = [];
+    let current = root;
+    while (current || stack.length > 0) {
+        while (current) {
+            result.push(current.data);
+            stack.push(current);
+            current = current.left;
+        }
+        current = stack.pop();
+        current = current.right;
+    }
+    return result;
+}
+
+//中序遍历
+function inorderTraversal(root) {
+    const result = [];
+    const stack = [];
+    let current = root;
+    while (current || stack.length > 0) {
+        while (current) {
+            stack.push(current);
+            current = current.left;
+        }
+        current = stack.pop();
+        result.push(current.data);
+        current = current.right;
+    }
+    return result;
+}
+
+//后序遍历
+function postorderTraversal(root) {
+    const result = [];
+    const stack = [];
+    let lastVisited = null;
+    let current = root;
+    while (current || stack.length > 0) {
+        while (current) {
+            stack.push(current);
+            current = current.left;
+        }
+        current = stack.pop();
+        // 如果右子树为空或者右子树已经被访问过
+        if (current.right === null || current.right === lastVisited) {
+            result.push(current.data);
+            lastVisited = current;
+            current = null;
+        } else {
+            stack.push(current);
+            current = current.right;
+        }
+    }
+    return result;
+}
+            </code>
+        </pre>
+        <p>能力有限，数据结构只懂这么多了</p>
+        <p>感谢你能看到这里，如果累了可以去玩一下小游戏哦<a href="./snake.html" style='color:blue'>点这里( •̀ ω •́ )y</a></p>
     </div>
     <script>
         function createImage() {
