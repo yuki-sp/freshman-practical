@@ -44,7 +44,7 @@
 
         .image {
             position: absolute;
-            background-image: url(../images/1.png);
+            background-image: url(./images/1.png);
             background-size: cover;
             top: 0;
             left: 50%;
@@ -146,7 +146,7 @@
             display: none;
             position: absolute;
             border-radius: 50%;
-            animation: spin .5s linear infinite,fadeAway .5s linear forwards;
+            animation: spin .5s linear infinite, fadeAway .5s linear forwards;
         }
 
         @keyframes spin {
@@ -158,6 +158,7 @@
                 transform: rotate(360deg);
             }
         }
+
         @keyframes fadeAway {
             0% {
                 opacity: 1;
@@ -176,6 +177,76 @@
             }
         }
     </style>
+    <style>
+        @keyframes carousel {
+
+            0%,
+            17.5% {
+                transform: translateZ(-35vw) rotateY(0deg);
+            }
+
+            27.5%,
+            45% {
+                transform: translateZ(-35vw) rotateY(-120deg);
+            }
+
+            55%,
+            72.5% {
+                transform: translateZ(-35vw) rotateY(-240deg);
+            }
+
+            82.5%,
+            100% {
+                transform: translateZ(-35vw) rotateY(-360deg);
+            }
+        }
+
+        .reflect {
+            -webkit-box-reflect: below 25px linear-gradient(transparent 80%, rgba(255, 255, 255, 0.3));
+        }
+
+        .item:nth-child(1) {
+            background-image: url('./images/image1.jpg');
+            transform: rotateY(0) translateZ(35vw);
+        }
+
+        .item:nth-child(2) {
+            background-image: url('./images/image3.jpg');
+            transform: rotateY(120deg) translateZ(35vw);
+        }
+
+        .item:nth-child(3) {
+            background-image: url('./images/image2.jpg');
+            transform: rotateY(240deg) translateZ(35vw);
+        }
+
+        .item:nth-child(1):hover::after {
+            content: "子网页1";
+            opacity: 1;
+            font-size: large;
+        }
+
+        .item:nth-child(2):hover::after {
+            content: "子网页2";
+            opacity: 1;
+            font-size: large;
+        }
+
+        .item:nth-child(3):hover::after {
+            content: "子网页3";
+            opacity: 1;
+            font-size: large;
+        }
+
+        .item {
+            transform-style: preserve-3d;
+        }
+
+        .item:hover {
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
@@ -183,6 +254,24 @@
     <img src="./images/1.png" alt="" id="image2" class="centered" ondragstart="return false">
     <div class="scrollable-div">
         <h1>子网站导航</h1>
+        <div class="flex items-center justify-center h-[40vh] overflow-hidden" style="margin: 50px;">
+            <div class="relative w-[60vw] h-[40vw] max-w-[380px] max-h-[270px] perspective-[1000px]"
+                style="perspective: 1000px;margin: 50px;">
+                <div id="carousel"
+                    class="absolute w-full h-full flex items-center justify-center transform-style-3d preserve-3d transform-origin-center animate-[carousel_9s_infinite_cubic-bezier(0.77,0,0.175,1)]"
+                    style="transform-style: preserve-3d;">
+                    <div id="item1"
+                        class="item absolute w-[60vw] h-[40vw] max-w-[380px] max-h-[270px] shadow-lg rounded-lg bg-cover reflect">
+                    </div>
+                    <div id="item2"
+                        class="item absolute w-[60vw] h-[40vw] max-w-[380px] max-h-[270px] shadow-lg rounded-lg bg-cover reflect">
+                    </div>
+                    <div id="item3"
+                        class="item absolute w-[60vw] h-[40vw] max-w-[380px] max-h-[270px] shadow-lg rounded-lg bg-cover reflect">
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="guide">
             <a href="./web/1.html">第一页</a>
             <a href="./web/2.html">第二页</a>
@@ -191,6 +280,7 @@
         </div>
         <h1>自我介绍</h1>
         <p>高中时自学过前端，会一些html，css，js，一点前端框架，自己做过一些项目，子网站的内容是以前做的一些项目。</p>
+        <p>github主页:<a href="https://github.com/yuki-sp">yuki-sp</a>求star qwq</p>
     </div>
     <script>
         function createImage() {
@@ -231,7 +321,7 @@
         documentBody.addEventListener('click', function (event) {
             const imgElement = document.createElement('img');
             imgElement.classList.add('clickimg');
-            imgElement.src = '../images/1.png';
+            imgElement.src = './images/1.png';
             imgElement.style.left = event.clientX + 'px';
             imgElement.style.top = event.clientY + 'px';
             imgElement.style.display = 'block';
@@ -240,6 +330,18 @@
                 document.body.removeChild(imgElement);
             }, 1000);
         });
+        const item1 = document.getElementById("item1");
+        item1.addEventListener("click", () => {
+            window.location.href = 'https://yuki-sp.github.io/freshman-practical/ysp924/web/1.html';
+        })
+        const item2 = document.getElementById("item1");
+        item1.addEventListener("click", () => {
+            window.location.href = 'https://yuki-sp.github.io/freshman-practical/ysp924/web/2.html';
+        })
+        const item3 = document.getElementById("item1");
+        item1.addEventListener("click", () => {
+            window.location.href = 'https://yuki-sp.github.io/freshman-practical/ysp924/web/3.html';
+        })
     </script>
 </body>
 

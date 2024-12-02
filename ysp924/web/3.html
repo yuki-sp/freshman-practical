@@ -7,6 +7,11 @@
     <title>简陋音乐播放器</title>
 </head>
 <style>
+    body {
+        background-image: url(../images/image3.jpg);
+        background-size: cover;
+    }
+
     #guide1,
     #guide2 {
         position: absolute;
@@ -54,6 +59,10 @@
     #container {
         max-height: 85vh;
         overflow: hidden;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    #h1{
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .span {
@@ -61,41 +70,43 @@
         font-size: 30px;
         transform: translateX(-3vw);
     }
+
     .clickimg {
-            width: 30px;
-            height: 30px;
-            display: none;
-            position: absolute;
-            border-radius: 50%;
-            animation: spin .5s linear infinite,fadeAway .5s linear forwards;
+        width: 30px;
+        height: 30px;
+        display: none;
+        position: absolute;
+        border-radius: 50%;
+        animation: spin .5s linear infinite, fadeAway .5s linear forwards;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
         }
 
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
+        to {
+            transform: rotate(360deg);
         }
-        @keyframes fadeAway {
-            0% {
-                opacity: 1;
-            }
+    }
 
-            17% {
-                opacity: 0.8;
-            }
-
-            83% {
-                opacity: 0.3;
-            }
-
-            100% {
-                opacity: 0;
-            }
+    @keyframes fadeAway {
+        0% {
+            opacity: 1;
         }
+
+        17% {
+            opacity: 0.8;
+        }
+
+        83% {
+            opacity: 0.3;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
 </style>
 
 <body>
@@ -106,7 +117,7 @@
     <div id="guide2">
         <a href="4.html">>>下一页(4.html)</a>
     </div>
-    <div>
+    <div id="h1">
         <span class="span">恭喜发财</span>
     </div>
     <div id="container"></div>
